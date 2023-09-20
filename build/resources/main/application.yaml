@@ -1,0 +1,62 @@
+tenants:
+  datasources:
+    postgres:
+      jdbcUrl: jdbc:postgresql://localhost:5432/postgres
+      driverClassName: org.postgresql.Driver
+      username: postgres
+      password: postgres
+    tenant1:
+      jdbcUrl: jdbc:postgresql://localhost:5432/postgres
+      driverClassName: org.postgresql.Driver
+      username: tenant1
+      password: tenant1
+    tenant2:
+      jdbcUrl: jdbc:postgresql://localhost:5432/postgres
+      driverClassName: org.postgresql.Driver
+      username: tenant2
+      password: tenant2
+
+server:
+  port: 8080
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: public
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+multitenancy:
+  master:
+    database: master
+    datasource:
+      url: jdbc:postgresql://localhost:5432/master
+      username: postgres
+      password: secret
+      hikari:
+        maximum-pool-size: 1
+    repository:
+      packages: se.callista.blog.service.multitenancy.repository
+    entityManager:
+      packages: se.callista.blog.service.multitenancy.domain
+    liquibase:
+      enabled: false
+  shard:
+    username: app_user
+    password: secret
+    datasource:
+      url-prefix: jdbc:postgresql://localhost:5432/
+    liquibase:
+      enabled: true
+      changeLog: classpath:db/changelog/db.changelog-shard.yaml
+      parameters:
+        schema: ${spring.jpa.properties.hibernate.default_schema}
+        database: ${multitenancy.master.database}
+        app_db_user: ${multitenancy.shard.username}
+        app_db_password: ${multitenancy.shard.password}
+  tenant:
+    repository:
+      packages: se.callista.blog.service.repository
+    entityManager:
+      packages: se.callista.blog.service.domain
