@@ -31,9 +31,9 @@ multitenancy:
   master:
     database: master
     datasource:
-      url: jdbc:postgresql://localhost:5432/master
+      url: jdbc:postgresql://localhost:5432/postgres
       username: postgres
-      password: secret
+      password: postgres
       hikari:
         maximum-pool-size: 1
     repository:

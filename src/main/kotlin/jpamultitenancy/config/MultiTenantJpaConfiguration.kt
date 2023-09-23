@@ -5,6 +5,7 @@ import org.hibernate.cfg.Environment
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties
@@ -28,9 +29,11 @@ class MultiTenantJpaConfiguration {
     private val hibernateProperty: HibernateProperties? = null
 
     @Autowired
+    @Qualifier("dynamicDataSourceBasedMultiTenantConnectionProvider")
     private val multiTenantConnectionProvider: MultiTenantConnectionProvider? = null
 
     @Autowired
+    @Qualifier("currentTenantIdentifierResolver")
     private val currentTenantIdentifierResolver: CurrentTenantIdentifierResolver? = null
 
     @Bean
